@@ -50,14 +50,14 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <div className="bg-white p-8 rounded-2xl shadow-xl">
+        <div className="bg-gray-200 p-8 rounded-2xl shadow-xl">
           <div className="text-center mb-8">
             <motion.h2
               initial={{ opacity: 0 }}

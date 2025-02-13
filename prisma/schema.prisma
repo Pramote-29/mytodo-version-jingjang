@@ -10,27 +10,46 @@ datasource db {
 }
 
 model User {
+  id         Int        @id @default(autoincrement())
+  email      String     @unique
+  password   String
+  name       String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  tasks      Task[]
+  categories Category[] // เพิ่มส่วนนี้
+}
+
+model Category {
   id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  name      String?
+  name      String
+  color     String   @default("#6366F1")
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  tasks     Task[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  tasks     Task[]
 }
 
 model Task {
-  id          Int       @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   title       String
   description String?
   dueDate     DateTime?
-  priority    Priority  @default(LOW)
-  status      Status    @default(TODO)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  priority    Priority     @default(LOW)
+  status      Status       @default(TODO)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   userId      Int
-  user        User      @relation(fields: [userId], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
   subtasks    Subtask[]
+  category    Category?    @relation(fields: [categoryId], references: [id])
+  categoryId  Int?
+  notes       Note[]
+  attachments Attachment[]
+  importance  Importance   @default(NORMAL)
+  urgency     Urgency     @default(NORMAL)
+  reminder    DateTime?
 }
 
 model Subtask {
@@ -43,6 +62,25 @@ model Subtask {
   updatedAt DateTime @updatedAt
 }
 
+model Note {
+  id        Int      @id @default(autoincrement())
+  content   String
+  taskId    Int
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Attachment {
+  id        Int      @id @default(autoincrement())
+  name      String
+  url       String
+  type      String
+  taskId    Int
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
 enum Priority {
   LOW
   MEDIUM
@@ -53,4 +91,16 @@ enum Status {
   TODO
   IN_PROGRESS
   DONE
+}
+
+enum Importance {
+  LOW
+  NORMAL
+  HIGH
+}
+
+enum Urgency {
+  LOW
+  NORMAL
+  HIGH
 }

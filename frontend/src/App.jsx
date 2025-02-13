@@ -2,10 +2,11 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './context/AuthContext';
+import DashboardLayout from './components/layout/DashboardLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import TodoList from './pages/TodoList';
 
-// Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   
@@ -21,7 +22,7 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" />;
   }
   
-  return children;
+  return <DashboardLayout>{children}</DashboardLayout>;
 };
 
 const App = () => {
@@ -35,7 +36,7 @@ const App = () => {
             path="/"
             element={
               <ProtectedRoute>
-                <div>Todo List Page (Coming Soon)</div>
+                <TodoList />
               </ProtectedRoute>
             }
           />

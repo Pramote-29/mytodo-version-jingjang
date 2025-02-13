@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Set axios default header
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       const userData = JSON.parse(localStorage.getItem('user'));
       setUser(userData);
@@ -21,28 +20,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post(`${API_URL}/api/auth/login`, {
+      const response = await axios.post('http://localhost:5001/api/auth/login', {
         email,
         password,
-      });
-      const { token, user } = response.data;
-      // ไม่ต้องเก็บ token และ user ไว้ตอนสมัครสมาชิก เพราะต้องไป login ใหม่
-      return { success: true, message: 'Registration successful! Please login.' };
-      return { success: true };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data?.message || 'An error occurred',
-      };
-    }
-  };
-
-  const register = async (email, password, name) => {
-    try {
-      const response = await axios.post(`${API_URL}/api/auth/register`, {
-        email,
-        password,
-        name,
       });
       const { token, user } = response.data;
       localStorage.setItem('token', token);
@@ -53,7 +33,26 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.message || 'An error occurred',
+        error: error.response?.data?.message || 'An error occurred during login',
+      };
+    }
+  };
+
+  const register = async (email, password, name) => {
+    try {
+      const response = await axios.post('http://localhost:5001/api/auth/register', {
+        email,
+        password,
+        name,
+      });
+      return { 
+        success: true, 
+        message: 'Registration successful! Please login.' 
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'An error occurred during registration',
       };
     }
   };
