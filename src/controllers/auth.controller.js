@@ -1,3 +1,4 @@
+// src/controllers/auth.controller.js
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -52,6 +53,7 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
+    console.log('Login attempt:', req.body);
     const { email, password } = req.body;
 
     // Check if user exists
